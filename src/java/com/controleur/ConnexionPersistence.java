@@ -18,6 +18,12 @@ public class ConnexionPersistence {
 
     @PersistenceContext(unitName = "EmployesServletJPAPU")
     private EntityManager em;
+    
+    //GET EMPLOYES (SELECT ALL EMPLOYES)
+    //GET EMPLOYE PAR ID (PREPARED STMT)
+    //MODIFIER EMPLOYES (PREPARED STATEMENT)
+    //SUPPRIMER EMPLOYES (PREPARED STMT)
+    //GET IDENTIFIANTS (SELECT ALL iDENTIFIANTS
 
     public void persist(Object object) {
         em.persist(object);
