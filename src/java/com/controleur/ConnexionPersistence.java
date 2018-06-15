@@ -5,10 +5,16 @@
  */
 package com.controleur;
 
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 /**
@@ -21,9 +27,9 @@ public class ConnexionPersistence {
     @PersistenceContext(unitName = "EmployesServletJPAPU")
     private EntityManager em;
     
-    //GET EMPLOYE PAR ID (PREPARED STMT)
-    //MODIFIER EMPLOYES (PREPARED STATEMENT)
-    //SUPPRIMER EMPLOYES (PREPARED STMT)
+    //GET EMPLOYE PAR ID (PREPARED STMT) idEmp
+    //MODIFIER EMPLOYES (PREPARED STATEMENT) Objet Employes
+    //SUPPRIMER EMPLOYES (PREPARED STMT) idEmp (int)
     //GET IDENTIFIANTS (SELECT ALL iDENTIFIANTS
     
     public Collection getEmployes(){
@@ -31,8 +37,10 @@ public class ConnexionPersistence {
         return q.getResultList();
     }
     
-    public Collection getEmployesId(){
-        
+    public Collection getEmployesId(int idEmp){
+        Query q = em.createQuery("SELECT e from Employes e where e.id=:idEmp");
+        q.setParameter("idEmp", idEmp);
+        return q.getResultList();
     }
     
     public Collection getIdentifiants(){
@@ -40,13 +48,15 @@ public class ConnexionPersistence {
         return q.getResultList();
     }
     
-    public Collection modifierEmployes(){
-        Query q = em.createQuery("");
+    public Collection modifierEmployes(int idEmp){
+        Query q = em.createQuery("UPDATE Employes e SET nom prenom teldom telpro telport adresse ville codepostal mail from Employes where e.id=:idEmp");
+        q.setParameter("idEmp", idEmp);
         return q.getResultList();
     }
-    
-    public Collection supprimerEmployes(){
-        Query q = em.createQuery("DELETE from Employes where id=?");
+
+    public Collection supprimerEmployes(int idEmp){
+        Query q = em.createQuery("DELETE from Employes where e.id=:idEmp");
+        q.setParameter("idEmp", idEmp);
         return q.getResultList();
     }
 
