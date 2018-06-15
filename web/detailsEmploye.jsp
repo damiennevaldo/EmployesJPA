@@ -38,21 +38,21 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="textinput">Tél dom</label>
                             <div class="col-sm-10">
-                                <input type="text" name="frmTelDomicile" value=${employe.telDomicile}  class="form-control">
+                                <input type="text" name="frmTelDomicile" value=${employe.teldom}  class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="textinput">Tél mob</label>
                             <div class="col-sm-10">
-                                <input type="text" name="frmTelPortable" value=${employe.telPortable}  class="form-control">
+                                <input type="text" name="frmTelPortable" value=${employe.telport}  class="form-control">
                             </div>
                         </div>                      
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="textinput">Tél pro</label>
                             <div class="col-sm-10">
-                                <input type="text" name="frmTelPro" value=${employe.telPro}  class="form-control">
+                                <input type="text" name="frmTelPro" value=${employe.telpro}  class="form-control">
                             </div>
                         </div>
 
@@ -64,7 +64,7 @@
 
                             <label class="col-sm-2 control-label" for="textinput">Code postal</label>
                             <div class="col-sm-4">
-                                <input type="text" name="frmCodePostal" value=${employe.codePostal} class="form-control">
+                                <input type="text" name="frmCodePostal" value=${employe.codepostal} class="form-control">
                             </div>
                         </div>
 

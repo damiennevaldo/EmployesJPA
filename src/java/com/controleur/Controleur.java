@@ -5,15 +5,12 @@
  */
 package com.controleur;
 
-import com.employes.modele.EmployeBean;
-import com.employes.modele.EmployesPersistance;
-import com.employes.modele.UtilisateurBean;
-import com.employes.modele.UtilisateurPersistance;
 import com.employes.utils.EmployesConstantes;
+import com.model.Employes;
+import com.model.Identifiants;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +23,13 @@ import javax.servlet.http.HttpSession;
  */
 public class Controleur extends HttpServlet {
 
-    ArrayList<EmployeBean> listeEmployes;
-    EmployeBean employe;
-    UtilisateurBean userBean;
-    ResultSet rs;
+    @EJB
+    private ConnexionPersistence connexionPersistence;
+
+    ArrayList<Employes> listeEmployes;
+    ArrayList<Identifiants> listeIdentifiants = new ArrayList<>();
+    Employes employe;
     String idEmploye = EmployesConstantes.FRM_ID_EMPL_SELECT;
-    EmployesPersistance employeBD = new EmployesPersistance();
-    UtilisateurPersistance utilisateurBD = new UtilisateurPersistance();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,7 +48,7 @@ public class Controleur extends HttpServlet {
         String mdpForm = request.getParameter(EmployesConstantes.FRM_MDP);
         String action = request.getParameter(EmployesConstantes.ACTION);
 
-                if (action == null) {
+        if (action == null) {
             request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
 
         } else if (action != null) {
@@ -62,84 +59,76 @@ public class Controleur extends HttpServlet {
                     //Si le nom d'utilisateur et le mot de passe sont vide, renvoyer vers l'index
                     //avec un message d'erreur.
                     if (loginForm != null && mdpForm != null) {
-                        userBean = new UtilisateurBean();
 
                         if (loginForm.isEmpty() || mdpForm.isEmpty()) {
                             request.setAttribute("cleMessageErreur", EmployesConstantes.ERREUR_SAISIE_VIDE);
                             request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
                         } else {
-                            try {
-                                //Récupération des utilisateurs
-                                rs = utilisateurBD.getUtilisateurs();
-                                //Récupération du login et du mot de passe
-                                while (rs.next()) {
-                                    userBean.setLogin(rs.getString("LOGIN"));
-                                    userBean.setMdp(rs.getString("MDP"));
-                                }
-                            } catch (SQLException ex) {
-                                System.out.println(ex.getMessage());
-                            }
+                            listeIdentifiants.addAll(connexionPersistence.getIdentifiants());
+                            String ad = "test";
+//                            for (Identifiants i : listeIdentifiants) {
+                            if (ad == "test") {
+                                System.out.println("OK");
+//                                if (i.getLogin().equals(loginForm) && i.getMdp().equals(mdpForm)) {
+//                                    System.out.println(listeEmployes.get(0).getCodepostal());
+//                                    listeEmployes.addAll(connexionPersistence.getEmployes());
+//                                    System.out.println(listeEmployes.get(0).getAdresse());
+//                                    request.setAttribute("cleListeEmployes", listeEmployes);
+//                                    System.out.println(listeEmployes.get(0).getEmail());
+//                                    request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
+                            } else {
 
-                            //Si le login et le mot de passe entrées correspondent aux login et mot
-                            //de passe présents en base, créer un utilisateur et l'envoyer
-                            //vers la page tableauEmployes.jsp
-                            if (userBean.getLogin().equals(loginForm) && userBean.getMdp().equals(mdpForm)) {
-                                listeEmployes = employeBD.getListeEmployes();
-                                //request.setAttribute("cleListeEmployes", listeEmployes);
-                                request.setAttribute("cleListeEmployes", listeEmployes);
-                                request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
-                            } //Sinon envoyer vers la page d'accueil avec un message d'erreur.
-                            else {
                                 request.setAttribute("cleMessageErreur", EmployesConstantes.ERREUR_INFOS_CONN_KO);
                                 request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
                             }
                         }
+//                        }
                     }
 
                 case EmployesConstantes.ACTION_SUPPRIMER:
                     if (request.getParameter(idEmploye) != null) {
                         int idClientASupprimer = Integer.parseInt(request.getParameter(idEmploye));
-                        employeBD.supprimerEmployeParId(idClientASupprimer);
-                        listeEmployes = employeBD.getListeEmployes();
+                        connexionPersistence.supprimerEmployes(idClientASupprimer);
+                        listeEmployes.addAll(connexionPersistence.getEmployes());
                         request.setAttribute("cleListeEmployes", listeEmployes);
                         request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
                     }
 
                 case EmployesConstantes.ACTION_MODIFIER:
-                    employe = (EmployeBean) session.getAttribute("employe");
+                    employe = (Employes) session.getAttribute("employe");
                     employe.setAdresse(request.getParameter(EmployesConstantes.CHAMP_ADRESSE));
-                    employe.setCodePostal(request.getParameter(EmployesConstantes.CHAMP_CODEPOSTAL));
+                    employe.setCodepostal(request.getParameter(EmployesConstantes.CHAMP_CODEPOSTAL));
                     employe.setEmail(request.getParameter(EmployesConstantes.CHAMP_EMAIL));
                     employe.setNom(request.getParameter(EmployesConstantes.CHAMP_NOM));
                     employe.setPrenom(request.getParameter(EmployesConstantes.CHAMP_PRENOM));
-                    employe.setTelDomicile(request.getParameter(EmployesConstantes.CHAMP_TELDOMICILE));
-                    employe.setTelPortable(request.getParameter(EmployesConstantes.CHAMP_TELPORTABLE));
-                    employe.setTelPro(request.getParameter(EmployesConstantes.CHAMP_TELPRO));
+                    employe.setTeldom(request.getParameter(EmployesConstantes.CHAMP_TELDOMICILE));
+                    employe.setTelport(request.getParameter(EmployesConstantes.CHAMP_TELPORTABLE));
+                    employe.setTelpro(request.getParameter(EmployesConstantes.CHAMP_TELPRO));
                     employe.setVille(request.getParameter(EmployesConstantes.CHAMP_VILLE));
 
-                    employeBD.modifierEmploye(employe);
-                    listeEmployes = employeBD.getListeEmployes();
+                    connexionPersistence.modifierEmployes(employe);
+                    listeEmployes.addAll(connexionPersistence.getEmployes());
                     request.setAttribute("cleListeEmployes", listeEmployes);
                     request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
 
                 case EmployesConstantes.ACTION_DETAILS:
                     if (request.getParameter(idEmploye) != null) {
                         int idEmployeSelect = Integer.parseInt(request.getParameter(idEmploye));
-                        employe = employeBD.getEmployeParId(idEmployeSelect);
+                        listeEmployes.addAll(connexionPersistence.getEmployesId(idEmployeSelect));
+                        employe = listeEmployes.get(0);
                         session.setAttribute("employe", employe);
                         request.getRequestDispatcher(EmployesConstantes.PAGE_DETAIL_EMPLOYE).forward(request, response);
 
                     }
 
                 case EmployesConstantes.ACTION_VOIR_LISTE:
-                    listeEmployes = employeBD.getListeEmployes();
+                    listeEmployes.addAll(connexionPersistence.getEmployes());
                     request.setAttribute("cleListeEmployes", listeEmployes);
                     request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
 
             }
 
         }
-                
 
     }
 
@@ -182,5 +171,4 @@ public class Controleur extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
 }
