@@ -41,16 +41,16 @@ public class ConnexionPersistence {
     }
     
     public void modifierEmployes(Employes e){
-        Employes emp = (Employes) em.find(Employes .class, e.getId());
-        emp.setNom(emp.getNom());
-        emp.setPrenom(emp.getPrenom());
-        emp.setTeldom(emp.getTeldom());
-        emp.setTelport(emp.getTelport());
-        emp.setTelpro(emp.getTelpro());
-        emp.setAdresse(emp.getAdresse());
-        emp.setCodepostal(emp.getCodepostal());
-        emp.setVille(emp.getVille());
-        emp.setEmail(emp.getEmail());
+        Employes emp = (Employes) em.find(Employes.class, e.getId());
+        emp.setNom(e.getNom());
+        emp.setPrenom(e.getPrenom());
+        emp.setTeldom(e.getTeldom());
+        emp.setTelport(e.getTelport());
+        emp.setTelpro(e.getTelpro());
+        emp.setAdresse(e.getAdresse());
+        emp.setCodepostal(e.getCodepostal());
+        emp.setVille(e.getVille());
+        emp.setEmail(e.getEmail());
         em.persist(emp);        
     }
 
