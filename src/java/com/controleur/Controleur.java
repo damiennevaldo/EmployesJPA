@@ -26,9 +26,9 @@ public class Controleur extends HttpServlet {
     @EJB
     private ConnexionPersistence connexionPersistence;
 
-    ArrayList<Employes> listeEmployes;
+    ArrayList<Employes> listeEmployes = new ArrayList<>();
     ArrayList<Identifiants> listeIdentifiants = new ArrayList<>();
-    Employes employe;
+    Employes employe= new Employes();
     String idEmploye = EmployesConstantes.FRM_ID_EMPL_SELECT;
 
     /**
@@ -65,30 +65,29 @@ public class Controleur extends HttpServlet {
                             request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
                         } else {
                             listeIdentifiants.addAll(connexionPersistence.getIdentifiants());
-                            String ad = "test";
-//                            for (Identifiants i : listeIdentifiants) {
-                            if (ad == "test") {
-                                System.out.println("OK");
-//                                if (i.getLogin().equals(loginForm) && i.getMdp().equals(mdpForm)) {
-//                                    System.out.println(listeEmployes.get(0).getCodepostal());
-//                                    listeEmployes.addAll(connexionPersistence.getEmployes());
-//                                    System.out.println(listeEmployes.get(0).getAdresse());
-//                                    request.setAttribute("cleListeEmployes", listeEmployes);
-//                                    System.out.println(listeEmployes.get(0).getEmail());
-//                                    request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
-                            } else {
 
-                                request.setAttribute("cleMessageErreur", EmployesConstantes.ERREUR_INFOS_CONN_KO);
-                                request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
+                            for (Identifiants i : listeIdentifiants) {
+
+                                if (i.getLogin().equals(loginForm) && i.getMdp().equals(mdpForm)) {
+                                    listeEmployes.clear();
+                                    listeEmployes.addAll(connexionPersistence.getEmployes());
+
+                                    request.setAttribute("cleListeEmployes", listeEmployes);
+                                    request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
+                                } else {
+
+                                    request.setAttribute("cleMessageErreur", EmployesConstantes.ERREUR_INFOS_CONN_KO);
+                                    request.getRequestDispatcher(EmployesConstantes.PAGE_INDEX).forward(request, response);
+                                }
                             }
                         }
-//                        }
                     }
 
                 case EmployesConstantes.ACTION_SUPPRIMER:
                     if (request.getParameter(idEmploye) != null) {
                         int idClientASupprimer = Integer.parseInt(request.getParameter(idEmploye));
                         connexionPersistence.supprimerEmployes(idClientASupprimer);
+                        listeEmployes.clear();
                         listeEmployes.addAll(connexionPersistence.getEmployes());
                         request.setAttribute("cleListeEmployes", listeEmployes);
                         request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
@@ -96,6 +95,9 @@ public class Controleur extends HttpServlet {
 
                 case EmployesConstantes.ACTION_MODIFIER:
                     employe = (Employes) session.getAttribute("employe");
+                    
+                   // int id= (int)(session.getAttribute(idEmploye));
+                    //employe.setId( id);
                     employe.setAdresse(request.getParameter(EmployesConstantes.CHAMP_ADRESSE));
                     employe.setCodepostal(request.getParameter(EmployesConstantes.CHAMP_CODEPOSTAL));
                     employe.setEmail(request.getParameter(EmployesConstantes.CHAMP_EMAIL));
@@ -105,23 +107,31 @@ public class Controleur extends HttpServlet {
                     employe.setTelport(request.getParameter(EmployesConstantes.CHAMP_TELPORTABLE));
                     employe.setTelpro(request.getParameter(EmployesConstantes.CHAMP_TELPRO));
                     employe.setVille(request.getParameter(EmployesConstantes.CHAMP_VILLE));
+                   
 
                     connexionPersistence.modifierEmployes(employe);
+                    
+                    listeEmployes.clear();
                     listeEmployes.addAll(connexionPersistence.getEmployes());
+                    System.out.println(listeEmployes.get(0).getId());
+                    System.out.println(listeEmployes.get(0).getAdresse());
                     request.setAttribute("cleListeEmployes", listeEmployes);
                     request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
 
                 case EmployesConstantes.ACTION_DETAILS:
                     if (request.getParameter(idEmploye) != null) {
                         int idEmployeSelect = Integer.parseInt(request.getParameter(idEmploye));
+                        listeEmployes.clear();
                         listeEmployes.addAll(connexionPersistence.getEmployesId(idEmployeSelect));
                         employe = listeEmployes.get(0);
                         session.setAttribute("employe", employe);
+                      //  request.setAttribute("idEmploye", idEmployeSelect);
                         request.getRequestDispatcher(EmployesConstantes.PAGE_DETAIL_EMPLOYE).forward(request, response);
 
                     }
 
                 case EmployesConstantes.ACTION_VOIR_LISTE:
+                    listeEmployes.clear();
                     listeEmployes.addAll(connexionPersistence.getEmployes());
                     request.setAttribute("cleListeEmployes", listeEmployes);
                     request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);

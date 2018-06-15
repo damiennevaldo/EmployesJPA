@@ -41,14 +41,14 @@ public class ConnexionPersistence {
     }
     
     public void modifierEmployes(Employes e){
-        Employes emp = new Employes(e.getId(), e.getNom(), e.getPrenom(), e.getTeldom(), e.getTelport(), e.getTelpro(), e.getAdresse(), e.getCodepostal(), e.getVille(), e.getEmail());
+        Employes emp = new Employes(e.getId(),e.getNom(), e.getPrenom(), e.getTeldom(), e.getTelport(), e.getTelpro(), e.getAdresse(), e.getCodepostal(), e.getVille(), e.getEmail());
         em.persist(emp);        
     }
 
-    public Collection supprimerEmployes(int idEmp){
-        Query q = em.createQuery("DELETE from Employes where e.id=:idEmp");
+    public int supprimerEmployes(int idEmp){
+        Query q = em.createQuery("DELETE from Employes e where e.id=:idEmp");
         q.setParameter("idEmp", idEmp);
-        return q.getResultList();
+        return q.executeUpdate();
     }
 
     public void persist(Object object) {
