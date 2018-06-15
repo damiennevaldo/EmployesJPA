@@ -5,6 +5,7 @@
  */
 package com.controleur;
 
+import com.model.Employes;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -26,12 +27,9 @@ public class ConnexionPersistence {
 
     @PersistenceContext(unitName = "EmployesServletJPAPU")
     private EntityManager em;
-    
-    //GET EMPLOYE PAR ID (PREPARED STMT) idEmp
+   
     //MODIFIER EMPLOYES (PREPARED STATEMENT) Objet Employes
-    //SUPPRIMER EMPLOYES (PREPARED STMT) idEmp (int)
-    //GET IDENTIFIANTS (SELECT ALL iDENTIFIANTS
-    
+  
     public Collection getEmployes(){
         Query q = em.createQuery("SELECT e from Employes e");
         return q.getResultList();
@@ -48,10 +46,18 @@ public class ConnexionPersistence {
         return q.getResultList();
     }
     
-    public Collection modifierEmployes(int idEmp){
-        Query q = em.createQuery("UPDATE Employes e SET nom prenom teldom telpro telport adresse ville codepostal mail from Employes where e.id=:idEmp");
-        q.setParameter("idEmp", idEmp);
-        return q.getResultList();
+    public void modifierEmployes(Object Employes){
+        Employes emp = new Employes();
+        emp.setPrenom("PRENOM");
+        emp.setNom("NOM");
+        emp.setTeldom("TELDOM");
+        emp.setTelport("TELPORT");
+        emp.setTelpro("TELPRO");
+        emp.setAdresse("ADRESSE");
+        emp.setCodepostal("CODEPOSTAL");
+        emp.setVille("VILLE");
+        emp.setEmail("EMAIL");
+        em.persist(emp);        
     }
 
     public Collection supprimerEmployes(int idEmp){

@@ -32,7 +32,7 @@ public class Identifiants implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID2")
-    private Integer id2;
+    private Integer id;
     @Size(max = 32)
     @Column(name = "LOGIN")
     private String login;
@@ -44,15 +44,15 @@ public class Identifiants implements Serializable {
     }
 
     public Identifiants(Integer id2) {
-        this.id2 = id2;
+        this.id = id2;
     }
 
     public Integer getId2() {
-        return id2;
+        return id;
     }
 
     public void setId2(Integer id2) {
-        this.id2 = id2;
+        this.id = id2;
     }
 
     public String getLogin() {
@@ -74,7 +74,7 @@ public class Identifiants implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id2 != null ? id2.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -85,7 +85,7 @@ public class Identifiants implements Serializable {
             return false;
         }
         Identifiants other = (Identifiants) object;
-        if ((this.id2 == null && other.id2 != null) || (this.id2 != null && !this.id2.equals(other.id2))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -93,7 +93,7 @@ public class Identifiants implements Serializable {
 
     @Override
     public String toString() {
-        return "com.controleur.Identifiants[ id2=" + id2 + " ]";
+        return "com.controleur.Identifiants[ id2=" + id + " ]";
     }
     
 }
