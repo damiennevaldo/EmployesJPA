@@ -6,16 +6,10 @@
 package com.controleur;
 
 import com.model.Employes;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 /**
@@ -46,17 +40,8 @@ public class ConnexionPersistence {
         return q.getResultList();
     }
     
-    public void modifierEmployes(Object Employes){
-        Employes emp = new Employes();
-        emp.setPrenom("PRENOM");
-        emp.setNom("NOM");
-        emp.setTeldom("TELDOM");
-        emp.setTelport("TELPORT");
-        emp.setTelpro("TELPRO");
-        emp.setAdresse("ADRESSE");
-        emp.setCodepostal("CODEPOSTAL");
-        emp.setVille("VILLE");
-        emp.setEmail("EMAIL");
+    public void modifierEmployes(Employes e){
+        Employes emp = new Employes(e.getId(), e.getNom(), e.getPrenom(), e.getTeldom(), e.getTelport(), e.getTelpro(), e.getAdresse(), e.getCodepostal(), e.getVille(), e.getEmail());
         em.persist(emp);        
     }
 
