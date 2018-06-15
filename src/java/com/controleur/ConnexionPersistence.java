@@ -41,7 +41,16 @@ public class ConnexionPersistence {
     }
     
     public void modifierEmployes(Employes e){
-        Employes emp = new Employes(e.getId(),e.getNom(), e.getPrenom(), e.getTeldom(), e.getTelport(), e.getTelpro(), e.getAdresse(), e.getCodepostal(), e.getVille(), e.getEmail());
+        Employes emp = (Employes) em.find(Employes .class, e.getId());
+        emp.setNom(emp.getNom());
+        emp.setPrenom(emp.getPrenom());
+        emp.setTeldom(emp.getTeldom());
+        emp.setTelport(emp.getTelport());
+        emp.setTelpro(emp.getTelpro());
+        emp.setAdresse(emp.getAdresse());
+        emp.setCodepostal(emp.getCodepostal());
+        emp.setVille(emp.getVille());
+        emp.setEmail(emp.getEmail());
         em.persist(emp);        
     }
 
