@@ -47,10 +47,8 @@ public final class EmployesConstantes {
     public static final String ERREUR_AUCUNE_LIGNE_SELECT = "Vous n'avez sélectionné aucun employé!";
 
     //URL des pages jsp
-    public static final String PAGE_INDEX = "index.jsp";
-    public static final String PAGE_CONTROLEUR = "controleur.jsp";
-    public static final String PAGE_CONTROLEUR_TABLEAU = "controleurTableauEmployes.jsp";
-    public static final String PAGE_TOUS_LES_EMPLOYES = "tableauEmployes.jsp";
-    public static final String PAGE_DETAIL_EMPLOYE = "detailsEmploye.jsp";
+    public static final String PAGE_INDEX = "WEB-INF/View/index.jsp";
+    public static final String PAGE_TOUS_LES_EMPLOYES = "WEB-INF/View/tableauEmployes.jsp";
+    public static final String PAGE_DETAIL_EMPLOYE = "WEB-INF/View/detailsEmploye.jsp";
 
 }

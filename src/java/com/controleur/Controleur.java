@@ -96,8 +96,6 @@ public class Controleur extends HttpServlet {
                 case EmployesConstantes.ACTION_MODIFIER:
                     employe = (Employes) session.getAttribute("employe");
                     
-                   // int id= (int)(session.getAttribute(idEmploye));
-                    //employe.setId( id);
                     employe.setAdresse(request.getParameter(EmployesConstantes.CHAMP_ADRESSE));
                     employe.setCodepostal(request.getParameter(EmployesConstantes.CHAMP_CODEPOSTAL));
                     employe.setEmail(request.getParameter(EmployesConstantes.CHAMP_EMAIL));
@@ -113,8 +111,6 @@ public class Controleur extends HttpServlet {
                     
                     listeEmployes.clear();
                     listeEmployes.addAll(connexionPersistence.getEmployes());
-                    System.out.println(listeEmployes.get(0).getId());
-                    System.out.println(listeEmployes.get(0).getAdresse());
                     request.setAttribute("cleListeEmployes", listeEmployes);
                     request.getRequestDispatcher(EmployesConstantes.PAGE_TOUS_LES_EMPLOYES).forward(request, response);
 
@@ -124,8 +120,8 @@ public class Controleur extends HttpServlet {
                         listeEmployes.clear();
                         listeEmployes.addAll(connexionPersistence.getEmployesId(idEmployeSelect));
                         employe = listeEmployes.get(0);
+                        System.out.println("");
                         session.setAttribute("employe", employe);
-                      //  request.setAttribute("idEmploye", idEmployeSelect);
                         request.getRequestDispatcher(EmployesConstantes.PAGE_DETAIL_EMPLOYE).forward(request, response);
 
                     }

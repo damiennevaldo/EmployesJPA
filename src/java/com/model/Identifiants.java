@@ -31,7 +31,7 @@ public class Identifiants implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID2")
+    @Column(name = "ID")
     private Integer id;
     @Size(max = 32)
     @Column(name = "LOGIN")
